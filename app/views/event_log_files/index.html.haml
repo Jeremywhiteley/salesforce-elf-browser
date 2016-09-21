@@ -15,10 +15,6 @@
         End Time
       %input#endTime.form-control{type: "text", size: 24, name: 'endTime', value: "21"}
 
-    .form-group
-      %label
-        Event Type
-      = select_tag('eventtype', options_for_select(@event_types, @event_type), class: 'form-control')
     %button.btn.btn-primary{type: 'submit'}
       Apply
     = link_to('Clear', event_log_files_path, class: "btn btn-default")
