@@ -32,6 +32,7 @@ class EventLogFilesController < ApplicationController
       @end_time = params[:endTime]
       @log_files = @client.query("SELECT logintime, userid FROM LoginHistory where (hour_in_day(convertTimezone(logintime)) > 21 or hour_in_day(convertTimezone(logintime)) < 8)")
       @user_map = @client.query("SELECT Alias,Email,FirstName,Id,IsActive,LastName,Username FROM User")
+      puts @user_map.inspect
     end
 
   end
