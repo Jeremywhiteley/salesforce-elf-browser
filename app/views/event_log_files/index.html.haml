@@ -36,3 +36,15 @@
       separator: ' to '
     });
   });
+
+  - if @log_files.empty?
+    .alert.alert-info.alert-dismissible.fade.in{role: "alert"}
+      %button.close{"data-dismiss" => "alert", :type => "button"}
+        %span x
+      Zero entries found. Try changing query parameters.
+  - else
+    %table.table.table-striped.table-bordered.table-hover
+      %thead
+        %tr
+          %th User ID
+          %th LogIn Time
