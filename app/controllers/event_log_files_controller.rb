@@ -9,8 +9,15 @@ class EventLogFilesController < ApplicationController
     redirect_to root_path unless logged_in?
 
     @username = session[:username]
-    default_params_redirect
-    
+
+    if params[:daterange].nil?
+      default_params_redirect
+      return
+    elsif params[:daterange].nil? || params[:daterange].empty?
+      flash_message(:warnings, "The 'daterange' query parameter is invalid. Displaying default date range.")
+      default_params_redirect
+      return
+    end
   end
 
   def show
