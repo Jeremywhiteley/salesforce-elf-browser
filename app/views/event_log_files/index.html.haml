@@ -42,17 +42,3 @@
     %button.close{"data-dismiss" => "alert", :type => "button"}
       %span x
     Zero entries found. Try changing query parameters.
-- else
-  %table.table.table-striped.table-bordered.table-hover
-    %thead
-      %tr
-        %th User ID
-        %th LogIn Time
-
-    %tbody
-      - @log_files.each do |log_file|
-        %tr
-          %td.text-center
-            = log_file.userid
-          %td
-            = log_file.logintime
