@@ -30,9 +30,9 @@ class EventLogFilesController < ApplicationController
     begin
       @start_time = params[:startTime]
       @end_time = params[:endTime]
-      @log_files = @client.query("SELECT logintime, userid FROM LoginHistory where (hour_in_day(convertTimezone(logintime)) > 21 or hour_in_day(convertTimezone(logintime)) < 8")
+      @log_files = @client.query("SELECT logintime, userid FROM LoginHistory where (hour_in_day(convertTimezone(logintime)) > 21 or hour_in_day(convertTimezone(logintime)) < 8)")
     end
-    
+
   end
 
   def show
