@@ -18,6 +18,21 @@ class EventLogFilesController < ApplicationController
       default_params_redirect
       return
     end
+
+    begin
+      @start_date, @end_date = date_range_parser(params[:daterange])
+    rescue ArgumentError => e
+      flash_message(:warnings, "The 'daterange' query parameter with value '#{params[:daterange]}' is invalid. Displaying default date range.")
+      default_params_redirect
+      return
+    end
+
+    begin
+      @start_time = params[:startTime]
+      @end_time = params[:endTime]
+      @log_files = @client.query("SELECT logintime, userid FROM LoginHistory where (hour_in_day(convertTimezone(logintime)) > 21 or hour_in_day(convertTimezone(logintime)) < 8")
+    end
+    
   end
 
   def show
