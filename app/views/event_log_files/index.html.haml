@@ -48,3 +48,11 @@
         %tr
           %th User ID
           %th LogIn Time
+
+      %tbody
+        - @log_files.each do |log_file|
+          %tr
+            %td.text-center
+              = log_file.userid
+            %td
+              = log_file.logintime
