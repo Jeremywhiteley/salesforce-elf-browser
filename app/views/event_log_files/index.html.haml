@@ -55,4 +55,4 @@
           %td.text-center
             = log_file.UserId
           %td
-            = log_file.LoginTime
+            = log_file.LoginTime.in_time_zone("EST")
