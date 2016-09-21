@@ -9,10 +9,8 @@ class EventLogFilesController < ApplicationController
     redirect_to root_path unless logged_in?
 
     @username = session[:username]
-    if not session.has_key?("event_types")
-      session[:event_types] = get_event_types
-    end
-    @event_types = session["event_types"]
+    default_params_redirect
+    
   end
 
   def show
@@ -37,7 +35,7 @@ class EventLogFilesController < ApplicationController
   end
 
   def default_params_redirect
-    redirect_to event_log_files_path(daterange: "#{default_date.to_s} to #{default_date.to_s}", eventtype: ALL_EVENTS_TYPE, startTime: "8", endTime: "21")
+    redirect_to event_log_files_path(daterange: "#{default_date.to_s} to #{default_date.to_s}", startTime: "8", endTime: "21")
   end
 
   # Helper method to transform date (e.g. 2015-01-01) to time in ISO8601 format (e.g. 2015-01-01T00:00:00.000Z)
