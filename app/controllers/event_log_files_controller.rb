@@ -13,58 +13,6 @@ class EventLogFilesController < ApplicationController
       session[:event_types] = get_event_types
     end
     @event_types = session["event_types"]
-
-    if params[:daterange].nil? && params[:eventtype].nil?
-      default_params_redirect
-      return
-    elsif params[:daterange].nil? || params[:daterange].empty?
-      flash_message(:warnings, "The 'daterange' query parameter is invalid. Displaying default date range.")
-      default_params_redirect
-      return
-    elsif params[:eventtype].nil? || params[:eventtype].empty?
-      flash_message(:warnings, "The 'eventtype' query parameter is invalid. Displaying all event types.")
-      default_params_redirect
-      return
-    end
-
-    @event_type = @event_types.find { |event_type| event_type.downcase == params[:eventtype].downcase }
-
-    if @event_type.nil?
-      flash_message(:warnings, "The 'eventtype' query parameter with value '#{params[:eventtype]}' is invalid. Displaying all event types.")
-      default_params_redirect
-      return
-    end
-
-    begin
-      @start_date, @end_date = date_range_parser(params[:daterange])
-    rescue ArgumentError => e
-      flash_message(:warnings, "The 'daterange' query parameter with value '#{params[:daterange]}' is invalid. Displaying default date range.")
-      default_params_redirect
-      return
-    end
-
-    begin
-      @startTime = params[:startTime]
-      @endTime = params[:endTime]
-      puts "START = #{params[:startTime]}"
-      puts "END = #{params[:endTime]}"
-      if @event_type == ALL_EVENTS_TYPE
-#        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} ORDER BY LogDate DESC, EventType")
-#        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND HOUR_IN_DAY(LogDate) < #{@startTime} AND HOUR_IN_DAY(LogDate) > #{@endTime} AND LogDate <= #{date_to_time(@end_date)} ORDER BY LogDate DESC, EventType")
-#         @log_files = @client.query("SELECT Id, logintime, userid FROM LoginHistory where (hour_in_day(convertTimezone(logintime)) > 21 or hour_in_day(convertTimezone(logintime)) < 8")
-      else
-#        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} AND EventType = '#{@event_type}' ORDER BY LogDate DESC, EventType" )
-#        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} AND EventType = '#{@event_type}' ORDER BY LogDate DESC, EventType" )
-#         @log_files = @client.query("SELECT Id, logintime, userid FROM LoginHistory where (hour_in_day(convertTimezone(logintime)) > 21 or hour_in_day(convertTimezone(logintime)) < 8")
-      end
-    rescue Databasedotcom::SalesForceError => e
-      # Session has expired. Force user logout.
-      if e.message == "Session expired or invalid"
-        redirect_to logout_path
-      else
-        raise e
-      end
-    end
   end
 
   def show
