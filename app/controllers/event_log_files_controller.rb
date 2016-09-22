@@ -5,6 +5,11 @@ class EventLogFilesController < ApplicationController
 
   before_filter :setup_databasedotcom_client
 
+  def to_hash
+    hash = {}; self.attributes.each { |k,v| hash[k] = v }
+    return hash
+  end
+
   def index
     redirect_to root_path unless logged_in?
 
@@ -30,10 +35,8 @@ class EventLogFilesController < ApplicationController
     begin
       @start_time = params[:startTime]
       @end_time = params[:endTime]
-      @log_files = @client.query("SELECT logintime, userid FROM LoginHistory where (hour_in_day(convertTimezone(logintime)) > 21 or hour_in_day(convertTimezone(logintime)) < 8)")
+      @log_files = @client.query("SELECT logintime, userid FROM LoginHistory where logintime >= #{date_to_time(@start_date)} AND logintime <= #{date_to_time(@end_date)} AND (hour_in_day(convertTimezone(logintime)) > #{@end_time} or hour_in_day(convertTimezone(logintime)) < #{@start_time}) ORDER BY logintime")
       @user_map = @client.query("SELECT Alias,Email,FirstName,Id,IsActive,LastName,Username FROM User")
-      @theUser = @user_map.select { |user| user.Id == "005610000013vc5AAA"}
-      puts @theUser.inspect
     end
 
   end

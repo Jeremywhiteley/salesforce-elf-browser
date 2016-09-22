@@ -1,3 +1,4 @@
+= javascript_include_tag 'jquery.tabletoCSV.js'
 .well
   %form.form-inline{method: 'get', action: ''}
     .form-group
@@ -7,13 +8,13 @@
 
     .form-group
       %label{for: 'startTime'}
-        Start Time
-      %input#startTime.form-control{type: "text", size: 24, name: 'startTime', value: "8"}
+        Login Before
+      %input#startTime.form-control{type: "text", size: 24, name: 'startTime', value: "#{@start_time}"}
 
     .form-group
       %label{for: 'endTime'}
-        End Time
-      %input#endTime.form-control{type: "text", size: 24, name: 'endTime', value: "21"}
+        Login After
+      %input#endTime.form-control{type: "text", size: 24, name: 'endTime', value: "#{@end_time}"}
 
     %button.btn.btn-primary{type: 'submit'}
       Apply
@@ -22,6 +23,9 @@
 
 :javascript
   $(document).ready(function() {
+    $('#export').click(function(){
+      $("#datatable").tableToCSV();
+    });
     $('#daterange').daterangepicker({
       format: 'YYYY-MM-DD',
       startDate: moment("#{@start_date}"),
@@ -43,11 +47,14 @@
       %span x
     Zero entries found. Try changing query parameters.
 - else
-  %table.table.table-striped.table-bordered.table-hover
+  %table.table.table-striped.table-bordered.table-hover{:id => "datatable"}
     %thead
       %tr
         %th User ID
-        %th LogIn Time
+        %th User Name
+        %th Email
+        %th Last Name
+        %th Login
 
     %tbody
       - @log_files.each do |log_file|
@@ -55,4 +62,12 @@
           %td.text-center
             = log_file.UserId
           %td
+            = get_user_data(log_file, @user_map, "Username")
+          %td
+            = get_user_data(log_file, @user_map, "Email")
+          %td
+            = get_user_data(log_file, @user_map, "LastName")
+            = get_user_data(log_file, @user_map, "FirstName")
+          %td
             = log_file.LoginTime.in_time_zone("EST")
+  %button{:id => "export"} Export
