@@ -52,6 +52,7 @@ List excludes:<br>
 <li>Justin Meade
 <li>Swathy Reddy
 <li>Kedar Relangi
+<li>Source IP = 207.211.26.117 (Mimecast)
 </ul>
 - if @log_files.empty?
   .alert.alert-info.alert-dismissible.fade.in{role: "alert"}
@@ -68,7 +69,7 @@ List excludes:<br>
         %th Email
         %th Last Name
         %th Login
-
+        %th Source IP
     %tbody
       - @log_files.each do |log_file|
         %tr
@@ -85,4 +86,6 @@ List excludes:<br>
             = get_user_data(log_file, @user_map, "FirstName")
           %td
             = log_file.LoginTime.in_time_zone("EST")
+          %td
+            = log_file.SourceIP
   %button{:id => "export"} Export
