@@ -64,6 +64,7 @@ List excludes:<br>
       %tr
         %th User ID
         %th User Name
+        %th Application
         %th Email
         %th Last Name
         %th Login
@@ -75,6 +76,8 @@ List excludes:<br>
             = log_file.UserId
           %td
             = get_user_data(log_file, @user_map, "Username")
+          %td
+            = log_file.Application
           %td
             = get_user_data(log_file, @user_map, "Email")
           %td
