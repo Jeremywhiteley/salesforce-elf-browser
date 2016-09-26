@@ -5,6 +5,11 @@ class EventLogFilesController < ApplicationController
 
   before_filter :setup_databasedotcom_client
 
+  def to_hash
+    hash = {}; self.attributes.each { |k,v| hash[k] = v }
+    return hash
+  end
+
   def index
     redirect_to root_path unless logged_in?
 
@@ -30,12 +35,16 @@ class EventLogFilesController < ApplicationController
     begin
       @start_time = params[:startTime]
       @end_time = params[:endTime]
-      @log_files = @client.query("SELECT logintime, userid FROM LoginHistory where (hour_in_day(convertTimezone(logintime)) > 21 or hour_in_day(convertTimezone(logintime)) < 8)")
+      @log_files = @client.query("SELECT logintime, userid FROM LoginHistory where logintime >= #{date_to_time(@start_date)} AND logintime <= #{date_to_time(@end_date)} AND (hour_in_day(convertTimezone(logintime)) > #{@end_time} or hour_in_day(convertTimezone(logintime)) < #{@start_time}) and userid not in ('00561000001p5NAAAY', '00561000001atvkAAA', '00561000001ZZlDAAW', '00561000001ZZlQAAW', '00561000001ZZksAAG', '005610000013vc5AAA', '005610000013K1yAAE','00561000001p5N5AAI','00561000001a1haAAA') ORDER BY logintime")
       @user_map = @client.query("SELECT Alias,Email,FirstName,Id,IsActive,LastName,Username FROM User")
-      @theUser = @user_map.select { |user| user.Id == "005610000013vc5AAA"}
-      puts @theUser.inspect
+    rescue Databasedotcom::SalesForceError => e
+      # Session has expired. Force user logout.
+      if e.message == "Session expired or invalid"
+        redirect_to logout_path
+      else
+        raise e
+      end
     end
-
   end
 
   def show

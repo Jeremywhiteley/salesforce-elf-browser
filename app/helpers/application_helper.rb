@@ -14,4 +14,12 @@ module ApplicationHelper
     flash[type] ||= []
     flash[type] << message
   end
+
+  def get_user_data(login_record, user_map, field)
+    theUser = user_map.select { |user| user.Id == login_record.UserId}
+    theUserJson = theUser[0].to_json
+    theUserHash = JSON.parse(theUserJson)
+    theUserHash[field]
+  end
+
 end
