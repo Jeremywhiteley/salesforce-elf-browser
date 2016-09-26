@@ -85,7 +85,7 @@ List excludes:<br>
             = get_user_data(log_file, @user_map, "LastName")
             = get_user_data(log_file, @user_map, "FirstName")
           %td
-            = (log_file.LoginTime - 4.hours).to_datetime
+            = (log_file.LoginTime - 4.hours).to_datetime.to_formatted_s(:short)
           %td
             = log_file.SourceIp
   %button{:id => "export"} Export
