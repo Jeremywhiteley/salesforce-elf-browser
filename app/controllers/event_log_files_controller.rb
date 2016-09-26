@@ -35,7 +35,7 @@ class EventLogFilesController < ApplicationController
     begin
       @start_time = params[:startTime]
       @end_time = params[:endTime]
-      @log_files = @client.query("SELECT logintime, userid, Application FROM LoginHistory where logintime >= #{date_to_time(@start_date)} AND logintime <= #{date_to_time(@end_date)} AND (hour_in_day(convertTimezone(logintime)) > #{@end_time} or hour_in_day(convertTimezone(logintime)) < #{@start_time}) and userid not in ('00561000001p5NAAAY', '00561000001atvkAAA', '00561000001ZZlDAAW', '00561000001ZZlQAAW', '00561000001ZZksAAG', '005610000013vc5AAA', '005610000013K1yAAE','00561000001p5N5AAI','00561000001a1haAAA') ORDER BY logintime")
+      @log_files = @client.query("SELECT logintime, userid, Application FROM LoginHistory where logintime >= #{date_to_time(@start_date)} AND logintime <= #{date_to_time(@end_date)} AND (hour_in_day(convertTimezone(logintime)) > #{@end_time} or hour_in_day(convertTimezone(logintime)) < #{@start_time}) and userid not in ('00561000001p5NAAAY', '00561000001atvkAAA', '00561000001ZZlDAAW', '00561000001ZZlQAAW', '00561000001ZZksAAG', '005610000013vc5AAA', '005610000013K1yAAE','00561000001p5N5AAI','00561000001a1haAAA','00550000003Y5UIAA0') ORDER BY logintime")
       @user_map = @client.query("SELECT Alias,Email,FirstName,Id,IsActive,LastName,Username FROM User")
     rescue Databasedotcom::SalesForceError => e
       # Session has expired. Force user logout.
